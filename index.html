@@ -1,0 +1,115 @@
+<html>
+  <head>
+    <title>BT Smart Controller Demo</title>
+  </head>
+  <body>
+    <h1>BT Smart Controller Demo</h1>
+
+    <!-- fischertechnik BT Smart Controller WebBluetooth and WebUSB demo -->
+
+    <p>
+      <button disabled="true" id="btnBT" onclick="connect_bluetooth()">Connect via Web Bluetooth</button>
+      <button disabled="true" id="btnUSB" onclick="connect_usb()">Connect via WebUSB</button>
+      <input disabled="true" type="checkbox" id="btnM1">M1 on/off</input>
+      <div id="message"></div>
+    </p>
+    
+    <script>
+      function message(m) {
+          document.getElementById("message").innerHTML += m + "<br/>";
+      }
+      
+      if(navigator.bluetooth === undefined && navigator.usb === undefined) 
+          message("<font color=\"red\">"+
+		  "Your browser does not support Web Bluetooth nor Web USB.<br>"+
+		  "Please try e.g. Google Chrome and make sure "+
+		  "Web Bluetooth and/or Web USB is enabled.</font>");
+      else {
+
+	  if(navigator.bluetooth !== undefined)	{
+              document.getElementById("btnBT").disabled = false;
+              message("Web Bluetooth available.");
+	  } else
+              message("Web Bluetooth not available.");
+	  
+	  if(navigator.usb !== undefined) {
+              document.getElementById("btnUSB").disabled = false;
+              message("Web USB available.");
+	  } else
+              message("Web USB not available.");
+      }
+      
+      function toggle_bt(characteristic) {
+	  m1_value = document.getElementById("btnM1").checked?127:0;
+	  characteristic.writeValue(new Uint8Array([m1_value]));
+      }
+	  
+      function connect_bluetooth() {
+          navigator.bluetooth.requestDevice({
+              filters: [{ name: 'BT Smart Controller' }],
+              optionalServices: ['8ae883b4-ad7d-11e6-80f5-76304dec7eb7']
+          }).then(device => {
+              message("Device found. Connecting ...");
+              return device.gatt.connect();
+          }).then(server => {
+              message("Connected. Searching for output service ...");
+              return server.getPrimaryService('8ae883b4-ad7d-11e6-80f5-76304dec7eb7');
+          }).then(service => {
+              message("Service found. Requesting M1 characteristic ...");
+              return service.getCharacteristic('8ae8860c-ad7d-11e6-80f5-76304dec7eb7');
+          }).then(characteristic => {
+              message("Characteristic found.");
+              message("You can now use the M1 on/off checkbox.");
+              document.getElementById("btnM1").disabled = false;
+	      document.getElementById("btnM1").onclick = toggle_bt.bind(this, characteristic);	      
+          }).catch(error => {
+              message("Error: " + error);
+          });
+      }
+      
+      function toggle_usb(device) {
+	  m1_value = document.getElementById("btnM1").checked?127:0;
+	  data = new Uint8Array( [ 0x5a, 0xa5, 0x68, 0xce, 0x2a, 0x04, 0, 4,  0, 3, 0, m1_value ]);
+	  device.transferOut(2, data);
+      }
+	  
+      function connect_usb() {
+	  var device;
+	  
+	  navigator.usb.requestDevice({
+              filters: [ { 'vendorId': 0x221d, 'productId': 0x0005 } ],
+          }).then(dev => {
+	      device = dev;              // save device for later use
+              message("Device "+ device.productName + " found. Opening ...");
+	      return device.open();
+          }).then(function() {
+              message("Opened. Selecting configuration 1 ...");
+	      return device.selectConfiguration(1);
+          }).then(function() {
+              message("Config ok. Claiming interface 0 ...");
+	      return device.claimInterface(0);
+          } ).then(function() {
+	      message("Interface ok, setting bit rate to 115200 bps...");
+	      return device.controlTransferOut({ requestType: 'vendor',
+				 recipient: 'device',
+				 request: 3,             // set baudrate 
+				 value: 3000000/115200,  // to 115200 bit/s
+				 index: 0 });
+          } ).then(function() {
+	      message("Bitrate set. Setting default M1 state ...");
+	      data = new Uint8Array( [ 0x5a, 0xa5, 0x68, 0xce, 0x2a, 0x04, 0, 4,  0, 3, 0, 0 ]);
+	      return device.transferOut(2, data);	      
+          } ).then(function() {
+              message("You can now use the M1 on/off checkbox.");
+              document.getElementById("btnM1").disabled = false;
+	      document.getElementById("btnM1").onclick = toggle_usb.bind(this, device);	      
+          }).catch(error => {
+              console.log("Error: " + error);
+              message("Error: " + error);
+          });
+      }
+
+    </script>
+    
+  </body>
+</html>
