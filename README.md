@@ -27,7 +27,7 @@ containing the following line will give the necessary permissions.
 ATTRS{idVendor}=="221d" ATTRS{idProduct}=="0005", MODE="664", GROUP="plugdev"
 ```
 
-## Andoid
+## Android
 
 The demo runs out of the box with the chrome preinstalled on any
 recent android device. However, for the USB version to work a
