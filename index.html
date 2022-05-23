@@ -1,17 +1,20 @@
 <html>
   <head>
-    <title>BT Smart Controller Demo</title>
+    <title>BT Smart Web Demo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <h1>BT Smart Controller Demo</h1>
+    <h1>BT Smart Web Demo</h1>
 
     <!-- fischertechnik BT Smart Controller WebBluetooth and WebUSB demo -->
 
     <p>
       <button disabled="true" id="btnBT" onclick="connect_bluetooth()">Connect via Web Bluetooth</button>
       <button disabled="true" id="btnUSB" onclick="connect_usb()">Connect via WebUSB</button>
-      <input disabled="true" type="checkbox" id="btnM1">M1 on/off</input>
+    </p>
+    
+    <p>
+      <input disabled="true" type="checkbox" id="btnM1">Switch output M1 on/off</input>
       <div id="message"></div>
     </p>
     
