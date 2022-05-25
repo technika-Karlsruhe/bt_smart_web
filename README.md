@@ -8,6 +8,16 @@ https://technika-karlsruhe.github.io/bt_smart_web/
 
 This demo has been tested under Windows, Linux and Android.
 
+## Windows
+
+The Web Bluetooth part should work on Windows out of the box. Web USB
+may need some help. If the attempt to use Web USB ends with a
+"Access Denied" error, the WinUSB driver may not ba assigned to
+the BT Smart Controller. The [Zadig tool](https://zadig.akeo.ie/)
+will probably be able to solve this. Use the tool to search for the
+"BT Smart Controller" use it to replace the exiting driver with
+WinUSB driver. Afterwards the Web USB part should work as well.
+
 ## Linux
 
 Under Ubuntu Linux the Chrome/Chromium is by default installed from a snap archive and is by default sandboxed. It thus doesn't have the necessary permissions to access USB. The following command allows for raw USB access from within Chrome/Chromium:
