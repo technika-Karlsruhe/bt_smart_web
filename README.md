@@ -18,6 +18,10 @@ will probably be able to solve this. Use the tool to search for the
 "BT Smart Controller" use it to replace the exiting driver with
 WinUSB driver. Afterwards the Web USB part should work as well.
 
+The original driver and the COM port are not associated with
+the board afterwards. Re-installing the driver in the system settings
+will restore the original default driver and restore the COM port.
+
 ## Linux
 
 Under Ubuntu Linux the Chrome/Chromium is by default installed from a snap archive and is by default sandboxed. It thus doesn't have the necessary permissions to access USB. The following command allows for raw USB access from within Chrome/Chromium:
