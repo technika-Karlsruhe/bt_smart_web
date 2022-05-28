@@ -6,21 +6,13 @@ To run this demo open the following link using google chrome:
 
 https://technika-karlsruhe.github.io/bt_smart_web/
 
-This demo has been tested under Windows, Linux and Android.
+This demo has been tested under Windows, Linux, MacOS and Android.
 
 ## Windows
 
-The Web Bluetooth part should work on Windows out of the box. Web USB
-may need some help. If the attempt to use Web USB ends with a
-"Access Denied" error, the WinUSB driver may not ba assigned to
-the BT Smart Controller. The [Zadig tool](https://zadig.akeo.ie/)
-will probably be able to solve this. Use the tool to search for the
-"BT Smart Controller" use it to replace the exiting driver with
-WinUSB driver. Afterwards the Web USB part should work as well.
+The Web Bluetooth part should work on Windows out of the box. Web USB may need some help. If the attempt to use Web USB ends with a "Access Denied" error, the WinUSB driver may not ba assigned to the BT Smart Controller. The [Zadig tool](https://zadig.akeo.ie/) will probably be able to solve this. Use the tool to search for the "BT Smart Controller" use it to replace the exiting driver with WinUSB driver. Afterwards the Web USB part should work as well.
 
-The original driver and the COM port are not associated with
-the board afterwards. Re-installing the driver in the system settings
-will restore the original default driver and restore the COM port.
+The original driver and the COM port are not associated with the board afterwards. Re-installing the driver in the system settings will restore the original default driver and restore the COM port.
 
 ## Linux
 
@@ -35,6 +27,10 @@ Furthermore direct USB permissions may need to be given to the current user. Cre
 ```
 ATTRS{idVendor}=="221d" ATTRS{idProduct}=="0005", MODE="664", GROUP="plugdev"
 ```
+
+## MacOS
+
+The WebUSB version works out of the box on MacOS Catalina. Web Bluetooth is untested due to a lack of Bluetooth support in the test setup.
 
 ## Android
 
