@@ -30,7 +30,7 @@ ATTRS{idVendor}=="221d" ATTRS{idProduct}=="0005", MODE="664", GROUP="plugdev"
 
 ## MacOS
 
-The WebUSB version works out of the box on MacOS Catalina. Web Bluetooth is untested due to a lack of Bluetooth support in the test setup.
+Web Bluetooth as well as Web USB version works out of the box on Chrome on MacOS.
 
 ## Android
 
